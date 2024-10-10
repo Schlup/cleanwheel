@@ -3,7 +3,7 @@ services:
     image: postgres:16.0
     restart: always
     ports:
-      - 5432:5432
+      - 5555:5432
     environment:
       - POSTGRES_DB=cleanwheel
       - POSTGRES_USER=postgres
@@ -15,6 +15,6 @@ services:
     image: flyway/flyway
     command: -url=jdbc:postgresql://postgres/cleanwheel -user=postgres -password=2525 migrate
     volumes:
-      - ./flyway/sql:/flyway/sql
+      - ./db/migrations:/flyway/sql
     depends_on:
       - postgres
