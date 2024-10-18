@@ -1,5 +1,5 @@
 CREATE TABLE business_address (
-    id SERIAL PRIMARY KEY,
+    business_uuid UUID PRIMARY KEY REFERENCES business(uuid),
     street_name VARCHAR(50),
     complement VARCHAR(50),
     neighborhood VARCHAR(50),
