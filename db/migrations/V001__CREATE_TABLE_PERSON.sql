@@ -4,5 +4,5 @@ CREATE TABLE person (
     lastname VARCHAR(50),
     email VARCHAR(75) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL, --encrypted
-    cpf INT UNIQUE
+    cpf VARCHAR(11) UNIQUE
 );
