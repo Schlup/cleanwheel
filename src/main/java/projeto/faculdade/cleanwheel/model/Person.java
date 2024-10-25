@@ -33,7 +33,7 @@ public class Person {
     private String password;
 
     @Column(name = "cpf", unique = true)
-    private Integer cpf;
+    private String cpf;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     private Contact contact;

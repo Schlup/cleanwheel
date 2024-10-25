@@ -16,7 +16,7 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @PostMapping
+    @PostMapping(path = "/register")
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         Person savedPerson = personService.savePerson(person);
         return ResponseEntity.ok(savedPerson);

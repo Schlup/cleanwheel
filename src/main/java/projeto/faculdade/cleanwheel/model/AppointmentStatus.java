@@ -1,10 +1,6 @@
 package projeto.faculdade.cleanwheel.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,5 +18,6 @@ public class AppointmentStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ID autoincremental
     private Long id;
 
+    @Column(name = "status", nullable = false, length = 20, unique = true)
     private String status;
 }
