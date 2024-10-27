@@ -3,6 +3,6 @@ CREATE TABLE person (
     name VARCHAR(50) NOT NULL,
     lastname VARCHAR(50),
     email VARCHAR(75) NOT NULL UNIQUE,
-    password VARCHAR(100) NOT NULL, --encrypted
+    password VARCHAR(255) NOT NULL, --encrypted
     cpf VARCHAR(11) UNIQUE
 );

@@ -29,7 +29,7 @@ public class Person {
     @Column(name = "email", nullable = false, length = 75, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 100)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "cpf", unique = true)
