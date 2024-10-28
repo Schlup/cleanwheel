@@ -3,7 +3,7 @@ package projeto.faculdade.cleanwheel.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import projeto.faculdade.cleanwheel.dto.PersonRegistrationDTO;
+import projeto.faculdade.cleanwheel.dto.RegisterDTO;
 import projeto.faculdade.cleanwheel.model.Person;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
@@ -22,21 +22,8 @@ public class PersonService {
     // Register, Login, Update
 
     //Literalmente só salva o user no db
-    public Person savePerson(PersonRegistrationDTO personDTO) {
-
-        if (!personDTO.getPassword().equals(personDTO.getRepeatPassword())) {
-            throw new IllegalArgumentException("Passwords do not match!");
-        }
-
-        personDTO.setPassword(passwordEncoder.encode(personDTO.getPassword()));
-
-        Person person = new Person();
-        person.setName(personDTO.getName());
-        person.setLastname(personDTO.getLastname());
-        person.setEmail(personDTO.getEmail());
-        person.setPassword(passwordEncoder.encode(personDTO.getPassword()));
-
-        return personRepository.save(person);
+    public Person savePerson(RegisterDTO personDTO) {
+    return null;
     }
 
 

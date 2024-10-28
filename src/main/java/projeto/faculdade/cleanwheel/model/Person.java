@@ -47,6 +47,14 @@ public class Person implements UserDetails {
     @Column(name = "role")
     private UserRole role;
 
+    public Person(String name, String lastname, String email, String password, UserRole role) {
+        this.name = name;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UserRole.OWNER) return List.of(new SimpleGrantedAuthority("ROLE_OWNER"), new SimpleGrantedAuthority("ROLE_USER"));
