@@ -54,13 +54,4 @@ public class PersonService {
                 })
                 .orElseThrow(() -> new RuntimeException("Person not found with UUID: " + uuid));
     }
-
-
-    public Optional<Person> getPersonById(UUID uuid) {
-        return personRepository.findById(uuid);
-    }
-
-    public Person getPersonByEmail(String email) {
-        return personRepository.findByEmail(email);
-    }
 }
