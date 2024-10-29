@@ -7,6 +7,7 @@ import projeto.faculdade.cleanwheel.dto.RegisterDTO;
 import projeto.faculdade.cleanwheel.model.Person;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,9 +27,10 @@ public class PersonService {
     return null;
     }
 
+    public List<Person> getAllPersons() {
+        return personRepository.findAll();
+    }
 
-
-    //Update das informações do usuário, telefone vai separado?
     public Person updatePerson(UUID uuid, Person updatedPerson) {
         return personRepository.findById(uuid)
                 .map(person -> {

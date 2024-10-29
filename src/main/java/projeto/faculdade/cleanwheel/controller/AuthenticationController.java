@@ -15,6 +15,7 @@ import projeto.faculdade.cleanwheel.dto.AuthenticationDTO;
 import projeto.faculdade.cleanwheel.dto.LoginResponseDTO;
 import projeto.faculdade.cleanwheel.dto.RegisterDTO;
 import projeto.faculdade.cleanwheel.model.Person;
+import projeto.faculdade.cleanwheel.model.UserRole;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
 @RestController
@@ -54,10 +55,9 @@ public class AuthenticationController {
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
-        Person newPerson = new Person(data.name(), data.lastname(), data.email(), encryptedPassword, data.role());
+        Person newPerson = new Person(data.name(), data.lastname(), data.email(), encryptedPassword, UserRole.USER);
 
         this.personRepository.save(newPerson);
         return ResponseEntity.ok().build();
     }
-
 }

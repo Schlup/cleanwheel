@@ -11,6 +11,7 @@ import projeto.faculdade.cleanwheel.model.Person;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.UUID;
 
 @Service
 public class TokenService {
@@ -25,6 +26,7 @@ public class TokenService {
             String token = JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(person.getEmail())
+                    .withClaim("userId", person.getUuid().toString()) // Adicionado para por o UUID no token tbm
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
             return token;
@@ -49,4 +51,21 @@ public class TokenService {
     private Instant genExpirationDate() {
         return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
     }
+
+    //Descriptografa o token e pega o UUID dele
+    public UUID getUUIDFromToken(String token) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(secret);
+            String userId = JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getClaim("userId")
+                    .asString();
+            return UUID.fromString(userId);
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Error while verifying token " + exception);
+        }
+    }
+
 }

@@ -23,4 +23,6 @@ public class Business {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_uuid", nullable = false)
     private Person owner;
+
+    private String name;
 }
