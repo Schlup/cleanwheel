@@ -17,7 +17,7 @@ import java.util.UUID;
 public class BusinessContact {
 
     @Id
-    @Column(name = "business_uuid")
+    @Column(name = "business_contact")
     private UUID businessUuid;
 
     @OneToOne(fetch = FetchType.LAZY)

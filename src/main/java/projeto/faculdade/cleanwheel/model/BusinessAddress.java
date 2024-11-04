@@ -20,8 +20,9 @@ public class BusinessAddress {
     @Column(name = "business_address")
     private UUID businessUuid;
 
-    @OneToOne
-    @JoinColumn(name = "business_uuid", referencedColumnName = "uuid", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "business_uuid")
     private Business business;
 
     @Column(name = "street_name", length = 50)
