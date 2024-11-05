@@ -1,13 +1,13 @@
 package projeto.faculdade.cleanwheel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
-import projeto.faculdade.cleanwheel.model.Business;
-import projeto.faculdade.cleanwheel.model.BusinessAddress;
-import projeto.faculdade.cleanwheel.model.BusinessContact;
-import projeto.faculdade.cleanwheel.model.Person;
-import projeto.faculdade.cleanwheel.model.UserRole;
+import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
+import projeto.faculdade.cleanwheel.model.*;
 import projeto.faculdade.cleanwheel.repository.BusinessAddressRepository;
 import projeto.faculdade.cleanwheel.repository.BusinessContactRepository;
 import projeto.faculdade.cleanwheel.repository.BusinessRepository;
@@ -60,4 +60,24 @@ public class BusinessService {
 
         return business;
     }
+
+    public Page<GetBusinessDTO> listAllBusinesses(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Business> businesses = businessRepository.findAll(pageable);
+
+        return businesses.map(business -> {
+            BusinessContact contact = business.getContact(); // Acessa o contato
+            BusinessAddress address = business.getAddress(); // Acessa o endereço
+
+            return new GetBusinessDTO(
+                    business.getUuid(),
+                    business.getName(),
+                    contact.getPhone(),
+                    address.getStreetName(),
+                    address.getNeighborhood(),
+                    address.getCity()
+            );
+        });
+    }
+
 }

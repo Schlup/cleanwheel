@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/person/update").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/business/listAllBusiness").hasRole("USER")
                         //ADD THE OTHERS ENDPOINTS
                         .anyRequest().authenticated()// ? q poha isso faz
                 )

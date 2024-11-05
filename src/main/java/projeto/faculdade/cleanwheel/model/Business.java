@@ -25,4 +25,10 @@ public class Business {
     private Person owner;
 
     private String name;
+
+    @OneToOne(mappedBy = "business", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private BusinessContact contact;
+
+    @OneToOne(mappedBy = "business", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private BusinessAddress address;
 }
