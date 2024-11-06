@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.faculdade.cleanwheel.config.TokenService;
+import projeto.faculdade.cleanwheel.dto.BusinessPageDTO;
 import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.Business;
@@ -45,5 +46,12 @@ public class BusinessController {
         Page<GetBusinessDTO> dtoPage = businessService.listAllBusinesses(page, size);
         return ResponseEntity.ok(dtoPage);
     }
+
+    @GetMapping(path = "/{uuid}")
+    public ResponseEntity<BusinessPageDTO> getBusinessByUuid(@PathVariable UUID uuid) {
+        BusinessPageDTO businessDTO = businessService.getBusinessByUuid(uuid);
+        return ResponseEntity.ok(businessDTO);
+    }
+
 
 }

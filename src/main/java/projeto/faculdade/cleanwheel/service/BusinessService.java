@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import projeto.faculdade.cleanwheel.dto.BusinessPageDTO;
 import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.*;
@@ -79,5 +80,28 @@ public class BusinessService {
             );
         });
     }
+
+    public BusinessPageDTO getBusinessByUuid(UUID uuid) {
+        Business business = businessRepository.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("Business not found"));
+
+        BusinessContact contact = business.getContact();
+        BusinessAddress address = business.getAddress();
+
+        return new BusinessPageDTO(
+                business.getUuid(),
+                business.getName(),
+                contact.getEmail(),
+                contact.getPhone(),
+                address.getStreetName(),
+                address.getComplement(),
+                address.getNeighborhood(),
+                address.getCity(),
+                address.getState(),
+                address.getCountry(),
+                address.getPostalCode()
+        );
+    }
+
 
 }
