@@ -32,10 +32,11 @@ public class AppointmentController {
 
     @GetMapping(path = "/listAllAppointments")
     public ResponseEntity<Page<GetAppointmentsDTO>> listBusinesses(
+            @RequestParam UUID businessUuid,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size) {
 
-        Page<GetAppointmentsDTO> dtoPage = appointmentService.listAllAppointments(page, size);
+        Page<GetAppointmentsDTO> dtoPage = appointmentService.listAllAppointments(businessUuid, page, size);
         return ResponseEntity.ok(dtoPage);
     }
 }
