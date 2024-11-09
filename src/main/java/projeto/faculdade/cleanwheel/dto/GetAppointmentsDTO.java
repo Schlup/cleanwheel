@@ -7,8 +7,8 @@ import java.util.UUID;
 public record GetAppointmentsDTO(UUID appointment,
                                  UUID business,
                                  UUID person,
-                                 Long status,
-                                 Long service,
+                                 String status,
+                                 String service,
                                  Date date,
                                  Time time) {
 }
