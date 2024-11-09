@@ -1,8 +1,13 @@
 package projeto.faculdade.cleanwheel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.AppointmentDTO;
+import projeto.faculdade.cleanwheel.dto.GetAppointmentsDTO;
+import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.*;
 import projeto.faculdade.cleanwheel.repository.*;
 
@@ -44,5 +49,22 @@ public class AppointmentService {
         appointment.setTime(appointmentDTO.time());
 
         return appointmentRepository.save(appointment);
+    }
+
+    public Page<GetAppointmentsDTO> listAllAppointments(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentRepository.findAll(pageable);
+
+        return appointments.map(appointment -> {
+            return new GetAppointmentsDTO(
+                    appointment.getUuid(),
+                    appointment.getBusiness().getUuid(),
+                    appointment.getPerson().getUuid(),
+                    appointment.getStatus().getId(),
+                    appointment.getService().getId(),
+                    appointment.getDate(),
+                    appointment.getTime()
+            );
+        });
     }
 }

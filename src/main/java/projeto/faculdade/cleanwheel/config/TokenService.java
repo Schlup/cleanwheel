@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.model.Person;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @Service
 public class TokenService {
 
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
+
     //Ta la no application.properties
     @Value("${api.security.token.secret}")
     private String secret;
@@ -23,15 +27,15 @@ public class TokenService {
     public String generateToken(Person person) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("auth-api")
                     .withSubject(person.getEmail())
-                    .withClaim("userId", person.getUuid().toString()) // Adicionado para por o UUID no token tbm
+                    .withClaim("userId", person.getUuid().toString())
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
-            return token;
         } catch (JWTCreationException exception) {
-            throw new RuntimeException("Error while generating token " + exception);
+            logger.error("Error while generating token", exception);
+            throw new RuntimeException("Error while generating token", exception);
         }
     }
 
@@ -44,7 +48,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException exception) {
-            return "No user, or error, idk";
+            return null;
         }
     }
 
@@ -64,7 +68,8 @@ public class TokenService {
                     .asString();
             return UUID.fromString(userId);
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Error while verifying token " + exception);
+            logger.error("Error while verifying token", exception);
+            throw new RuntimeException("Error while verifying token", exception);
         }
     }
 

@@ -6,7 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.UUID;
 
 @Entity
@@ -41,5 +42,5 @@ public class Appointment {
     private Date date;
 
     @Temporal(TemporalType.TIME)
-    private Date time;
+    private Time time;
 }

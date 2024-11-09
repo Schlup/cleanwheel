@@ -1,5 +1,6 @@
 package projeto.faculdade.cleanwheel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,13 +23,16 @@ public class Business {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_uuid", nullable = false)
+    @JsonIgnore
     private Person owner;
 
     private String name;
 
     @OneToOne(mappedBy = "business", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private BusinessContact contact;
 
     @OneToOne(mappedBy = "business", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private BusinessAddress address;
 }

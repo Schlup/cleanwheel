@@ -1,5 +1,7 @@
 package projeto.faculdade.cleanwheel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Person implements UserDetails {
 
     @Id
@@ -41,6 +44,7 @@ public class Person implements UserDetails {
     private String cpf;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Contact contact;
 
     //OWNER ou USER, por hora...
