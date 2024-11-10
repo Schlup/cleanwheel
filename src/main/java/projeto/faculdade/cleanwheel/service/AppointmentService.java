@@ -54,9 +54,9 @@ public class AppointmentService {
         return appointmentRepository.save(appointment);
     }
 
-    public Page<GetAppointmentsDTO> listAllAppointments(int page, int size) {
+    public Page<GetAppointmentsDTO> listAllAppointments(UUID businessUuid, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Appointment> appointments = appointmentRepository.findAll(pageable);
+        Page<Appointment> appointments = appointmentRepository.findByBusinessUuid(businessUuid, pageable);
 
         return appointments.map(appointment -> {
 
