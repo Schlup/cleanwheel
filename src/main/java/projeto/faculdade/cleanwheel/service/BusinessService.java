@@ -7,12 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.BusinessPageDTO;
 import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
+import projeto.faculdade.cleanwheel.dto.BusinessUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.*;
 import projeto.faculdade.cleanwheel.repository.BusinessAddressRepository;
 import projeto.faculdade.cleanwheel.repository.BusinessContactRepository;
 import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
+
 import java.util.UUID;
 
 @Service
@@ -101,6 +103,56 @@ public class BusinessService {
                 address.getCountry(),
                 address.getPostalCode()
         );
+    }
+
+    public void updateBusiness(UUID ownerUUID, UUID businessUUID, BusinessUpdateDTO businessUpdateDTO) {
+
+        Business business = businessRepository.findById(businessUUID)
+                .orElseThrow(() -> new RuntimeException("Business not found"));
+
+        if (!business.getOwner().getUuid().equals(ownerUUID)) {
+            throw new RuntimeException("You are not authorized to update this business");
+        }
+
+        if (businessUpdateDTO.name() != null) {
+            business.setName(businessUpdateDTO.name());
+        }
+
+        BusinessContact contact = business.getContact();
+        if (businessUpdateDTO.email() != null) {
+            contact.setEmail(businessUpdateDTO.email());
+        }
+
+        if (businessUpdateDTO.phone() != null) {
+            contact.setPhone(businessUpdateDTO.phone());
+        }
+
+        BusinessAddress address = business.getAddress();
+        if (businessUpdateDTO.streetName() != null) {
+            address.setStreetName(businessUpdateDTO.streetName());
+        }
+        if (businessUpdateDTO.complement() != null) {
+            address.setComplement(businessUpdateDTO.complement());
+        }
+        if (businessUpdateDTO.neighborhood() != null) {
+            address.setNeighborhood(businessUpdateDTO.neighborhood());
+        }
+        if (businessUpdateDTO.city() != null) {
+            address.setCity(businessUpdateDTO.city());
+        }
+        if (businessUpdateDTO.state() != null) {
+            address.setState(businessUpdateDTO.state());
+        }
+        if (businessUpdateDTO.country() != null) {
+            address.setCountry(businessUpdateDTO.country());
+        }
+        if (businessUpdateDTO.postalCode() != null) {
+            address.setPostalCode(businessUpdateDTO.postalCode());
+        }
+
+        businessRepository.save(business);
+        businessContactRepository.save(contact);
+        businessAddressRepository.save(address);
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import projeto.faculdade.cleanwheel.config.TokenService;
 import projeto.faculdade.cleanwheel.dto.BusinessPageDTO;
 import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
+import projeto.faculdade.cleanwheel.dto.BusinessUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.Business;
 import projeto.faculdade.cleanwheel.model.BusinessAddress;
@@ -51,6 +52,17 @@ public class BusinessController {
     public ResponseEntity<BusinessPageDTO> getBusinessByUuid(@PathVariable UUID uuid) {
         BusinessPageDTO businessDTO = businessService.getBusinessByUuid(uuid);
         return ResponseEntity.ok(businessDTO);
+    }
+
+    @PutMapping("/update/{uuid}")
+    public ResponseEntity<?> updateBusiness(
+            @PathVariable UUID uuid,
+            @RequestBody BusinessUpdateDTO businessUpdateDTO,
+            @RequestHeader("Authorization") String token) {
+
+        UUID ownerUUID = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
+        businessService.updateBusiness(ownerUUID, uuid, businessUpdateDTO);
+        return ResponseEntity.ok("Business updated successfully");
     }
 
 
