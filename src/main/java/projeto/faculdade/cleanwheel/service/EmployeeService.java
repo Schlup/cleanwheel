@@ -2,6 +2,7 @@ package projeto.faculdade.cleanwheel.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import projeto.faculdade.cleanwheel.dto.EmployeeListDTO;
 import projeto.faculdade.cleanwheel.dto.EmployeeRegisterDTO;
 import projeto.faculdade.cleanwheel.model.Business;
 import projeto.faculdade.cleanwheel.model.CarwashEmployees;
@@ -11,6 +12,10 @@ import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.CarwashRolesRepository;
 import projeto.faculdade.cleanwheel.repository.EmployeeRepository;
 import projeto.faculdade.cleanwheel.repository.PersonRepo;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -43,5 +48,24 @@ public class EmployeeService {
         // Criar e salvar Employee
         CarwashEmployees employee = new CarwashEmployees(null, business, person, role);
         return employeeRepository.save(employee);
+    }
+
+    public void deleteEmployee(Long employeeId) {
+        CarwashEmployees employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        employeeRepository.delete(employee);
+    }
+
+    public List<EmployeeListDTO> getAllEmployees(UUID businessUuid) {
+        // Recupera os empregados pelo UUID do business
+        List<CarwashEmployees> employees = employeeRepository.findByBusiness_Uuid(businessUuid);
+
+        // Converte para DTO
+        return employees.stream()
+                .map(employee -> new EmployeeListDTO(
+                        employee.getId(),
+                        employee.getPerson().getName(), // Supondo que Person tenha o campo "name"
+                        employee.getRole().getRole()))   // Obtendo o nome da Role
+                .collect(Collectors.toList());
     }
 }
