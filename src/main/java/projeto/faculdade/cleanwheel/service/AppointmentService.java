@@ -38,16 +38,13 @@ public class AppointmentService {
     public Appointment createAppointment(UUID personUuid, AppointmentDTO appointmentDTO) {
         Appointment appointment = new Appointment();
 
-        // Carrega as referências a partir do UUID ou ID
         Business business = businessRepository.findById(appointmentDTO.business()).orElseThrow(() -> new RuntimeException("Business not found"));
         Person person = personRepository.findById(personUuid).orElseThrow(() -> new RuntimeException("Person not found"));
 
-        // Carrega o status "Pendente" diretamente (ID 1)
         AppointmentStatus status = statusRepository.findById(1L).orElseThrow(() -> new RuntimeException("Status not found"));
 
         projeto.faculdade.cleanwheel.model.Service service = serviceRepository.findById(appointmentDTO.service()).orElseThrow(() -> new RuntimeException("Service not found"));
 
-        // Seta os dados
         appointment.setBusiness(business);
         appointment.setPerson(person);
         appointment.setStatus(status);
@@ -90,7 +87,6 @@ public class AppointmentService {
             throw new RuntimeException("Employee does not belong to the same business as the appointment");
         }
 
-        // Busca o novo status e atualiza o appointment
         AppointmentStatus newStatus = statusRepository.findById(statusUpdateDTO.statusId())
                 .orElseThrow(() -> new RuntimeException("Status not found"));
 

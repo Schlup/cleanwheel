@@ -29,10 +29,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+
                         .requestMatchers(HttpMethod.PUT, "/person/update").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/person/profile").hasRole("USER")
+
+                        .requestMatchers(HttpMethod.POST, "/business/register").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/business/update/{uuid}").hasRole("OWNER")
                         .requestMatchers(HttpMethod.GET, "/business/listAllBusiness").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/business/{uuid}").hasRole("USER")
+
+                        .requestMatchers(HttpMethod.POST, "/employee/create").hasRole("OWNER")
+                        .requestMatchers(HttpMethod.DELETE, "/employee/delete/{employeeId}").hasRole("OWNER")
+                        .requestMatchers(HttpMethod.GET, "/employee/list/{businessUuid}").hasRole("OWNER")
+
                         .requestMatchers(HttpMethod.POST, "/appointment/create").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/appointment/listAllAppointments").hasRole("EMPLOYEE")
+                        .requestMatchers(HttpMethod.GET, "/{appointmentId}/status").hasRole("EMPLOYEE")
+
                         //ADD THE OTHERS ENDPOINTS
                         .anyRequest().authenticated()// ? q poha isso faz
                 )

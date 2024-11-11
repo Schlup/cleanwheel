@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.EmployeeListDTO;
 import projeto.faculdade.cleanwheel.dto.EmployeeRegisterDTO;
-import projeto.faculdade.cleanwheel.model.Business;
-import projeto.faculdade.cleanwheel.model.CarwashEmployees;
-import projeto.faculdade.cleanwheel.model.CarwashRoles;
-import projeto.faculdade.cleanwheel.model.Person;
+import projeto.faculdade.cleanwheel.model.*;
 import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.CarwashRolesRepository;
 import projeto.faculdade.cleanwheel.repository.EmployeeRepository;
@@ -37,6 +34,8 @@ public class EmployeeService {
         Person person = personRepo.findByEmail(employeeRegisterDTO.employeeEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        person.setRole(UserRole.EMPLOYEE);
+
         // Buscar Business pelo UUID
         Business business = businessRepo.findById(employeeRegisterDTO.business())
                 .orElseThrow(() -> new RuntimeException("Business not found"));
@@ -53,6 +52,11 @@ public class EmployeeService {
     public void deleteEmployee(Long employeeId) {
         CarwashEmployees employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        Person person = employee.getPerson();
+        person.setRole(UserRole.USER);
+        personRepo.save(person);
+
         employeeRepository.delete(employee);
     }
 

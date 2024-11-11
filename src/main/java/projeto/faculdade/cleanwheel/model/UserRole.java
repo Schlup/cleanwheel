@@ -2,7 +2,8 @@ package projeto.faculdade.cleanwheel.model;
 
 public enum UserRole {
     OWNER("owner"),
-    USER("user");
+    USER("user"),
+    EMPLOYEE("employee");
 
     private String role;
 
