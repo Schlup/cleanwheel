@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface EmployeeRepository extends JpaRepository<CarwashEmployees, Long> {
     List<CarwashEmployees> findByBusiness_Uuid(UUID businessUuid);
+    boolean existsByBusinessUuidAndPersonUuid(UUID businessUuid, UUID personUuid);
 }

@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.AppointmentDTO;
+import projeto.faculdade.cleanwheel.dto.AppointmentStatusUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetAppointmentsDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.*;
@@ -30,6 +31,9 @@ public class AppointmentService {
 
     @Autowired
     private ServiceRepository serviceRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     public Appointment createAppointment(UUID personUuid, AppointmentDTO appointmentDTO) {
         Appointment appointment = new Appointment();
@@ -74,4 +78,25 @@ public class AppointmentService {
             );
         });
     }
+
+    public Appointment updateAppointmentStatus(UUID appointmentId, AppointmentStatusUpdateDTO statusUpdateDTO, UUID employeeUuid) {
+
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        boolean isEmployeeOfBusiness = employeeRepository.existsByBusinessUuidAndPersonUuid(appointment.getBusiness().getUuid(), employeeUuid);
+
+        if (!isEmployeeOfBusiness) {
+            throw new RuntimeException("Employee does not belong to the same business as the appointment");
+        }
+
+        // Busca o novo status e atualiza o appointment
+        AppointmentStatus newStatus = statusRepository.findById(statusUpdateDTO.statusId())
+                .orElseThrow(() -> new RuntimeException("Status not found"));
+
+        appointment.setStatus(newStatus);
+        return appointmentRepository.save(appointment);
+    }
+
+
 }
