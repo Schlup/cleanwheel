@@ -81,10 +81,14 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        boolean isEmployeeOfBusiness = employeeRepository.existsByBusinessUuidAndPersonUuid(appointment.getBusiness().getUuid(), employeeUuid);
+        //Verifica se é owner ou employee
+        if (!appointment.getBusiness().getOwner().getUuid().equals(employeeUuid)) {
+            // Se não for o OWNER, verifica se é um Employee do Business
+            boolean isEmployeeOfBusiness = employeeRepository.existsByBusinessUuidAndPersonUuid(appointment.getBusiness().getUuid(), employeeUuid);
 
-        if (!isEmployeeOfBusiness) {
-            throw new RuntimeException("Employee does not belong to the same business as the appointment");
+            if (!isEmployeeOfBusiness) {
+                throw new RuntimeException("Employee does not belong to the same business as the appointment");
+            }
         }
 
         AppointmentStatus newStatus = statusRepository.findById(statusUpdateDTO.statusId())
