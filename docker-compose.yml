@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=2525
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -35,3 +35,19 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cleanwheel
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 2525
+
+  frontend:
+    build:
+      context: ./frontend  # Caminho para o diretório onde está o Dockerfile do frontend React
+    ports:
+      - "3000:80"  # O frontend geralmente roda na porta 3000, mas no contêiner vai rodar na porta 80
+    depends_on:
+      - java-app  # O frontend vai aguardar o backend ser iniciado
+    environment:
+      - NODE_ENV=production
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
