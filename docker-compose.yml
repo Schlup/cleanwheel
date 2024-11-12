@@ -9,7 +9,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=2525
     healthcheck:
-      test: "pg_isready -q -U postgres"
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   flyway:
     image: flyway/flyway
@@ -17,4 +20,18 @@ services:
     volumes:
       - ./db/migrations:/flyway/sql
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+
+  java-app:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cleanwheel
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 2525

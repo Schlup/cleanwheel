@@ -97,6 +97,4 @@ public class AppointmentService {
         appointment.setStatus(newStatus);
         return appointmentRepository.save(appointment);
     }
-
-
 }
