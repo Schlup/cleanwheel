@@ -1,14 +1,11 @@
 import Title from './Title';
 import HeaderL from './HeaderL';
 
-const CreateCompany = () => {
+const EditCompany = () => {
   return (
     <main className="w-full min-h-screen bg-c11">
       <HeaderL />
-      <Title
-        title="REGISTRAR EMPRESA"
-        subtitle="informe os dados de sua empresa"
-      />
+      <Title title="MINHA EMPRESA" subtitle="informe os dados de sua empresa" />
       <div className="flex justify-center pb-[120px]">
         <div className="w-fit h-full pl-[48px] pr-[60px] pt-[20px] pb-[60px] bg-w">
           <div className="flex flex-row">
@@ -163,7 +160,7 @@ const CreateCompany = () => {
             </form>
           </section>
           <button className="w-[248px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins">
-            Registrar empresa
+            Alterar
           </button>
         </div>
       </div>
@@ -171,4 +168,4 @@ const CreateCompany = () => {
   );
 };
 
-export default CreateCompany;
+export default EditCompany;

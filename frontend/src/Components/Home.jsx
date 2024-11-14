@@ -2,11 +2,13 @@ import imgHome from '../Images/home.png';
 import imgLavacao from '../Images/lavacao.png';
 import imgPolimento from '../Images/polimento.png';
 import imgEnvelopamento from '../Images/envelopamento.png';
+import HeaderL from './HeaderL';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
     <main className="w-full min-h-screen bg-w">
+      <HeaderL />
       <div className="w-full h-[680px] bg-c12 ps-100px mb-[240px]">
         <div className="h-[800px] grid grid-cols-2 gap-[20px]">
           <div className="col-start place-self-center">

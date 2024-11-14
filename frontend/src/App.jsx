@@ -1,8 +1,6 @@
 import './App.css';
 import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './Components/Header';
-// import HeaderL from './Components/HeaderL';
 import Footer from './Components/Footer';
 import LandingPage from './Components/LandingPage';
 import Login from './Components/Login/Login';
@@ -15,12 +13,13 @@ import Home from './Components/Home';
 import Lavacao from './Components/Lavacao';
 import Polimento from './Components/Polimento';
 import Envelopamento from './Components/Envelopamento';
+import EditProfile from './Components/EditProfile';
+import EditCompany from './Components/EditCompany';
 
 const App = () => {
   return (
     <div>
       <BrowserRouter>
-        <Header />
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/singup" element={<SingUp />} />
@@ -33,6 +32,8 @@ const App = () => {
           <Route path="/lavacao" element={<Lavacao />} />
           <Route path="/polimento" element={<Polimento />} />
           <Route path="/envelopamento" element={<Envelopamento />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/editcompany" element={<EditCompany />} />
         </Routes>
         <Footer />
       </BrowserRouter>

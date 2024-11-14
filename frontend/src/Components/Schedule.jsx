@@ -5,12 +5,14 @@ import IcoSchedule from '../Assets/IcoSchedule';
 import IcoPhone from '../Assets/IcoPhone';
 import IcoLocation from '../Assets/IcoLocation';
 
+import HeaderL from './HeaderL';
 import Title from './Title';
 import imgCarWash from '../Images/carwash1.jpg';
 
 const Schedule = () => {
   return (
     <main className="w-full min-h-screen bg-c11">
+      <HeaderL />
       <Title title="AGENDA" subtitle="seus agendamentos" />
       <div className="mx-[100px] grid grid-cols-3 gap-[20px]">
         <div className="flex justify-beetwen">

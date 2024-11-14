@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import projeto.faculdade.cleanwheel.config.TokenService;
 import projeto.faculdade.cleanwheel.dto.AuthenticationDTO;
 import projeto.faculdade.cleanwheel.dto.LoginResponseDTO;
@@ -20,6 +17,7 @@ import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
 @RestController
 @RequestMapping("auth")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class AuthenticationController {
 
     @Autowired
@@ -50,7 +48,7 @@ public class AuthenticationController {
         }
 
         // Reverifica se as senhas informadas são iguais
-        if (!data.password().equals(data.repeatPassword()))  {
+        if (!data.password().equals(data.repeatPassword())) {
             throw new IllegalArgumentException("Password do not match");
         }
 

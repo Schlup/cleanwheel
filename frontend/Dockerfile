@@ -1,28 +1,29 @@
-# Etapa de build
+# Usar uma imagem base do Node.js para desenvolvimento
 FROM node:18 AS build
 
+# Definir o diretório de trabalho no container
 WORKDIR /app
 
-# Copie o package.json e package-lock.json
+# Copiar os arquivos do projeto para o container
 COPY package.json package-lock.json ./
 
-# Instale as dependências
+# Instalar as dependências
 RUN npm install
 
-# Copie os arquivos restantes
+# Copiar o restante do código
 COPY . .
 
-# Crie o build do frontend
+# Construir o projeto para produção
 RUN npm run build
 
-# Etapa para servir o frontend com o Nginx
+# Usar uma imagem do Nginx para servir o frontend
 FROM nginx:alpine
 
-# Copie o build gerado do primeiro estágio
+# Copiar os arquivos de build para o diretório do Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Exponha a porta 80 para o servidor Nginx
+# Expor a porta padrão do Nginx
 EXPOSE 80
 
-# Inicie o Nginx
+# Comando para rodar o Nginx
 CMD ["nginx", "-g", "daemon off;"]

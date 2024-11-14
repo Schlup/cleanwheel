@@ -19,12 +19,6 @@ const HeaderL = () => {
           </Link>
           <Link
             className={`${styles.btn} text-w ml-10 hover:underline focus:underline`}
-            to="/services"
-          >
-            Serviços
-          </Link>
-          <Link
-            className={`${styles.btn} text-w ml-10 hover:underline focus:underline`}
             to="/myprofile"
           >
             Meu Perfil

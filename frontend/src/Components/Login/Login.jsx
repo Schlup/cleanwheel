@@ -1,8 +1,16 @@
+import Header from '../Header';
 import Title from '../Title';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  async function goTo() {
+    navigate('/home');
+  }
   return (
     <main className="w-full min-h-screen bg-c11">
+      <Header />
       <Title title="ENTRAR" subtitle="informe seus dados" />
       <div className="flex justify-center pb-[120px]">
         <div className="w-fit h-full pl-[48px] pr-[60px] pt-[20px] pb-[60px] bg-w">
@@ -48,7 +56,10 @@ const Login = () => {
               />
             </form>
           </section>
-          <button className="w-[126px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins">
+          <button
+            onClick={goTo}
+            className="w-[126px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+          >
             Entrar
           </button>
         </div>

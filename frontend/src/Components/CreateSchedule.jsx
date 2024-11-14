@@ -1,8 +1,16 @@
 import Title from './Title';
+import HeaderL from './HeaderL';
+import { useNavigate } from 'react-router-dom';
 
 const CreateSchedule = () => {
+  const navigate = useNavigate();
+
+  async function goTo() {
+    navigate('/schedule');
+  }
   return (
     <main className="w-full min-h-screen bg-c11">
+      <HeaderL />
       <Title title="AGENDAR SERVIÇO" subtitle="confirmar agendamento" />
       <div className="flex justify-center pb-[120px]">
         <div className="w-fit h-full pl-[48px] pr-[60px] pt-[20px] pb-[60px] bg-w">
@@ -48,7 +56,10 @@ const CreateSchedule = () => {
               />
             </form>
           </section>
-          <button className="w-[151px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins">
+          <button
+            onClick={goTo}
+            className="w-[151px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+          >
             Agendar
           </button>
         </div>

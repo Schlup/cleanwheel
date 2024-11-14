@@ -18,14 +18,14 @@ services:
     image: flyway/flyway
     command: -url=jdbc:postgresql://postgres/cleanwheel -user=postgres -password=2525 migrate
     volumes:
-      - ./db/migrations:/flyway/sql
+      - ./cleanwheel/db/migrations:/flyway/sql
     depends_on:
       postgres:
         condition: service_healthy
 
   java-app:
     build:
-      context: .
+      context: cleanwheel
     ports:
       - "8080:8080"
     depends_on:
@@ -38,16 +38,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend  # Caminho para o diretório onde está o Dockerfile do frontend React
+      context: ./frontend
     ports:
-      - "3000:80"  # O frontend geralmente roda na porta 3000, mas no contêiner vai rodar na porta 80
+      - "3000:80" # Mapeia a porta 80 do container para a porta 3000 local
     depends_on:
-      - java-app  # O frontend vai aguardar o backend ser iniciado
-    environment:
-      - NODE_ENV=production
-    networks:
-      - backend_network
-
-networks:
-  backend_network:
-    driver: bridge
+      - java-app # Certifique-se que o backend esteja rodando antes
