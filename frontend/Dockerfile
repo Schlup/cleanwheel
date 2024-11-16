@@ -13,17 +13,17 @@ RUN npm install
 # Copiar o restante do código
 COPY . .
 
-# Construir o projeto para produção
+# Construir o projeto para produção (no caso de uma SPA, como React, Angular, etc)
 RUN npm run build
 
-# Usar uma imagem do Nginx para servir o frontend
+# Usar a imagem base do Nginx
 FROM nginx:alpine
 
 # Copiar os arquivos de build para o diretório do Nginx
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expor a porta padrão do Nginx
-EXPOSE 80
+# Expor a porta do Nginx
+EXPOSE 3000 
 
-# Comando para rodar o Nginx
+# Rodar o Nginx no foreground
 CMD ["nginx", "-g", "daemon off;"]

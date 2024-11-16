@@ -13,6 +13,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - spring_net
 
   flyway:
     image: flyway/flyway
@@ -22,6 +24,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    networks:
+      - spring_net
 
   java-app:
     build:
@@ -35,6 +39,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cleanwheel
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: 2525
+    networks:
+      - spring_net
+      - frontend_net
 
   frontend:
     build:
@@ -43,3 +50,9 @@ services:
       - "3000:80" # Mapeia a porta 80 do container para a porta 3000 local
     depends_on:
       - java-app # Certifique-se que o backend esteja rodando antes
+    networks:
+      - frontend_net
+
+networks:
+  spring_net:
+  frontend_net:

@@ -16,8 +16,7 @@ import projeto.faculdade.cleanwheel.model.UserRole;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
 @RestController
-@RequestMapping("auth")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     @Autowired
@@ -29,8 +28,9 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -39,8 +39,9 @@ public class AuthenticationController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO data) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
 
         //Verifica se existe email igual
         if (this.personRepository.findByEmail(data.email()) != null) {
