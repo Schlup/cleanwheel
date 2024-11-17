@@ -1,13 +1,71 @@
 import HeaderL from './HeaderL';
 import Title from './Title';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 const EditProfile = () => {
   const navigate = useNavigate();
 
-  async function goTo() {
-    navigate('/myprofile');
-  }
+  // Estados para armazenar os dados do formulário
+  const [formData, setFormData] = useState({
+    name: '',
+    lastname: '',
+    cpf: ''
+  });
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  // Função para lidar com mudanças nos campos do formulário
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Função para enviar os dados ao backend
+  const handleSubmit = async () => {
+    const token = Cookies.get('token'); // Obtém o token do cookie
+
+    if (!token) {
+      setError('Token não encontrado. Faça login novamente.');
+      return;
+    }
+
+    if (formData.password !== formData.repeatPassword) {
+      setError('As senhas não coincidem.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/person/update', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          lastname: formData.lastname,
+          cpf: formData.cpf
+        }),
+      });
+
+      if (response.ok) {
+        setSuccess('Informações atualizadas com sucesso!');
+        navigate('/myprofile'); // Redireciona para o perfil após o sucesso
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Erro ao atualizar as informações.');
+      }
+    } catch (err) {
+      setError('Erro ao se conectar com o servidor.');
+    }
+  };
+
   return (
     <main className="w-full min-h-screen bg-c11">
       <HeaderL />
@@ -21,11 +79,9 @@ const EditProfile = () => {
             </p>
           </div>
           <section>
-            <form
-              className="flex flex-col ml-[12px] pb-[20px]"
-              action=""
-              method="get"
-            >
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {success && <p className="text-green-500 mb-4">{success}</p>}
+            <form className="flex flex-col ml-[12px] pb-[20px]">
               <label className="font-poppins text-2-s pb-[10px]" htmlFor="name">
                 Nome
               </label>
@@ -35,7 +91,8 @@ const EditProfile = () => {
                 name="name"
                 id="name"
                 placeholder="Insira seu nome"
-                autoFocus
+                value={formData.name}
+                onChange={handleChange}
               />
               <label
                 className="font-poppins text-2-s pt-[20px] pb-[10px]"
@@ -49,54 +106,29 @@ const EditProfile = () => {
                 name="lastname"
                 id="lastname"
                 placeholder="Insira seu sobrenome"
-                autoFocus
+                value={formData.lastname}
+                onChange={handleChange}
               />
-              <label
+                <label
                 className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="email"
+                htmlFor="cpf"
               >
-                Email
+                CPF
               </label>
               <input
                 className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
                 type="text"
-                name="email"
-                id="email"
-                placeholder="contato@email.com"
-                autoFocus
+                name="cpf"
+                id="cpf"
+                placeholder="Insira seu CPF"
+                value={formData.cpf}
+                onChange={handleChange}
               />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="password"
-              >
-                Senha
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="password"
-                id="password"
-                placeholder="Insira sua senha"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="repeatPassword"
-              >
-                Confirme a senha
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="repeatPassword"
-                id="repeatPassword"
-                placeholder="Repita sua senha"
-                autoFocus
-              />
+          
             </form>
           </section>
           <button
-            onClick={goTo}
+            onClick={handleSubmit}
             className="w-[193px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
           >
             Alterar

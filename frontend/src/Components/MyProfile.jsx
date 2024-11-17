@@ -82,6 +82,10 @@ const MyProfile = () => {
                 <p className="font-poppins text-c4 text-1-s">Nome</p>
                 <p className="font-roboto text-2-s text-c6">{profileData?.name}</p>
               </div>
+              <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
+                <p className="font-poppins text-c4 text-1-s">Sobrenome</p>
+                <p className="font-roboto text-2-s text-c6">{profileData?.lastname}</p>
+              </div>
               <div className="w-[580px] h-[1px] ml-[12px] bg-c11 mt-[10px] mb-[9px]"></div>
               <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
                 <p className="font-poppins text-c4 text-1-s uppercase">CPF</p>

@@ -1,14 +1,72 @@
-import Title from './Title';
 import HeaderL from './HeaderL';
+import Title from './Title';
+import { useState } from "react";
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const CreateCompany = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    streetName: "",
+    complement: "",
+    neighborhood: "",
+    city: "",
+    state: "",
+    country: "",
+    postalCode: "",
+  });
+
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+
+  // Atualiza os dados do formulário
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  // Envia os dados do formulário para a API
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = Cookies.get('token'); // Obtém o token do cookie
+    if (!token) {
+      setError("Token de autenticação não encontrado. Faça login novamente.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/business/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setSuccess("Empresa registrada com sucesso!");
+        console.log("Dados da API:", data);
+        navigate('/businesses'); // Redireciona para a lista de empresas (ou ajuste conforme necessário)
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Erro ao registrar a empresa.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Erro ao se conectar com o servidor.");
+    }
+  };
+
   return (
     <main className="w-full min-h-screen bg-c11">
       <HeaderL />
-      <Title
-        title="REGISTRAR EMPRESA"
-        subtitle="informe os dados de sua empresa"
-      />
+      <Title title="REGISTRAR EMPRESA" subtitle="Informe os dados de sua empresa" />
       <div className="flex justify-center pb-[120px]">
         <div className="w-fit h-full pl-[48px] pr-[60px] pt-[20px] pb-[60px] bg-w">
           <div className="flex flex-row">
@@ -18,153 +76,44 @@ const CreateCompany = () => {
             </p>
           </div>
           <section>
-            <form
-              className="flex flex-col ml-[12px] pb-[20px]"
-              action=""
-              method="get"
-            >
-              <label className="font-poppins text-2-s pb-[10px]" htmlFor="name">
-                Nome
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Insira o nome da empresa"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="email"
+            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {success && <p className="text-green-500 mb-4">{success}</p>}
+            <form className="flex flex-col ml-[12px] pb-[20px]" onSubmit={handleSubmit}>
+              {[
+                { label: "Nome", name: "name", placeholder: "Insira o nome da empresa" },
+                { label: "Email", name: "email", placeholder: "contato@email.com" },
+                { label: "Telefone", name: "phone", placeholder: "(47)9999-999" },
+                { label: "Nome da rua", name: "streetName", placeholder: "Rua São Paulo" },
+                { label: "Complemento", name: "complement", placeholder: "Bloco Faculdade" },
+                { label: "Bairro", name: "neighborhood", placeholder: "Victor Konder" },
+                { label: "Cidade", name: "city", placeholder: "Blumenau" },
+                { label: "Estado", name: "state", placeholder: "Santa Catarina" },
+                { label: "País", name: "country", placeholder: "Brasil" },
+                { label: "CEP", name: "postalCode", placeholder: "89012-001" },
+              ].map((field) => (
+                <div key={field.name} className="pb-[20px]">
+                  <label className="font-poppins text-2-s pb-[10px]" htmlFor={field.name}>
+                    {field.label}
+                  </label>
+                  <input
+                    className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
+                    type="text"
+                    name={field.name}
+                    id={field.name}
+                    placeholder={field.placeholder}
+                    value={formData[field.name]}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              ))}
+              <button
+                type="submit"
+                className="w-[248px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
               >
-                Email
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="email"
-                id="email"
-                placeholder="contato@email.com"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="phone"
-              >
-                Telefone
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="phone"
-                id="phone"
-                placeholder="(47)9999-999"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="streetName"
-              >
-                Nome da rua
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="streetName"
-                id="streetName"
-                placeholder="Rua São Paulo"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="complement"
-              >
-                Complemento
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="complement"
-                id="complement"
-                placeholder="Bloco Faculdade"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="neighborhood"
-              >
-                Bairro
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="neighborhood"
-                id="neighborhood"
-                placeholder="Victor Konder"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="city"
-              >
-                Cidade
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="city"
-                id="city"
-                placeholder="Blumenau"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="state"
-              >
-                Estado
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="state"
-                id="state"
-                placeholder="Santa Catarina"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="country"
-              >
-                País
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="country"
-                id="country"
-                placeholder="Brasil"
-                autoFocus
-              />
-              <label
-                className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="postalCode"
-              >
-                CEP
-              </label>
-              <input
-                className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
-                name="postalCode"
-                id="postalCode"
-                placeholder="89012-001"
-                autoFocus
-              />
+                Registrar empresa
+              </button>
             </form>
           </section>
-          <button className="w-[248px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins">
-            Registrar empresa
-          </button>
         </div>
       </div>
     </main>

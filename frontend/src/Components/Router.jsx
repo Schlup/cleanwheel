@@ -21,36 +21,25 @@ function Router() {
 
                 <Route path='/' element={<LandingPage />} />
 
-                {loggedIn === false && (
-                    <>
-                        
-                        <Route path='/singup' element={<SingUp />} />
-                        <Route path='/login' element={<Login />} />
-                    </>
-                )}
 
-                {loggedIn === true && (
-                    <>
-                        <Route path='/home' element={<Home />} />
-                        <Route path='/myprofile' element={<MyProfile />} />
-                        <Route path='/services' element={<Services />} />                    
-                        <Route path='/agenda' element={<Schedule />} />
 
-                        {ownCompany === false && (
-                            <>
-                                <Route path='/createcompany' element={<CreateCompany />} />
-                            </>
-                        )}
+                <Route path='/singup' element={<SingUp />} />
+                <Route path='/login' element={<Login />} />
 
-                        {ownCompany === true && (
-                            <>
-                                <Route path='/createservice' element={<CreateService />} />
-                                <Route path='/companydashboard' element={<CompanyDashboard />} />
-                            </>
-                        )}
+                <Route path='/home' element={<Home />} />
+                <Route path='/myprofile' element={<MyProfile />} />
+                <Route path='/services' element={<Services />} />
+                <Route path='/agenda' element={<Schedule />} />
 
-                    </>
-                )}
+
+                <Route path='/createcompany' element={<CreateCompany />} />
+
+
+
+                <Route path='/createservice' element={<CreateService />} />
+                <Route path='/companydashboard' element={<CompanyDashboard />} />
+
+
 
 
             </Routes>

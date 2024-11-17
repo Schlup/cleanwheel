@@ -26,6 +26,7 @@ public class PersonController {
     @Autowired
     private TokenService tokenService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(path = "/update")
     public ResponseEntity<Person> updatePerson(@RequestBody PersonUpdateDTO personUpdateDTO, @RequestHeader("Authorization") String token) {
         UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
@@ -33,12 +34,14 @@ public class PersonController {
         return ResponseEntity.ok(updated);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/get/users")
     public ResponseEntity<List<Person>> getAllPersons() {
         List<Person> persons = personService.getAllPersons();
         return ResponseEntity.ok(persons);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/profile")
     public ResponseEntity<PersonReadDTO> getPersonInfo(@RequestHeader("Authorization") String token) {
         UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));

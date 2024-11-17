@@ -32,6 +32,7 @@ public class BusinessController {
     @Autowired
     private TokenService tokenService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping(path = "/register")
     public ResponseEntity<?> createBusiness(@RequestBody BusinessRegisterDTO businessRegisterDTO, @RequestHeader("Authorization") String token) {
         UUID ownerUUID = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
@@ -39,6 +40,7 @@ public class BusinessController {
         return ResponseEntity.ok(createdBusiness);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/listAllBusiness")
     public ResponseEntity<Page<GetBusinessDTO>> listBusinesses(
             @RequestParam(defaultValue = "0") int page,
@@ -48,12 +50,14 @@ public class BusinessController {
         return ResponseEntity.ok(dtoPage);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/{uuid}")
     public ResponseEntity<BusinessPageDTO> getBusinessByUuid(@PathVariable UUID uuid) {
         BusinessPageDTO businessDTO = businessService.getBusinessByUuid(uuid);
         return ResponseEntity.ok(businessDTO);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/update/{uuid}")
     public ResponseEntity<?> updateBusiness(
             @PathVariable UUID uuid,

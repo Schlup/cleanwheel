@@ -24,6 +24,7 @@ public class AppointmentController {
     @Autowired
     private TokenService tokenService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create")
     public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentDTO appointmentDTO, @RequestHeader("Authorization") String token) {
         UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
@@ -31,6 +32,7 @@ public class AppointmentController {
         return ResponseEntity.ok(createdAppointment);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/listAllAppointments")
     public ResponseEntity<Page<GetAppointmentsDTO>> listBusinesses(
             @RequestParam UUID businessUuid,
@@ -41,6 +43,7 @@ public class AppointmentController {
         return ResponseEntity.ok(dtoPage);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/{appointmentId}/status")
     public ResponseEntity<Appointment> updateAppointmentStatus(
             @PathVariable UUID appointmentId,
