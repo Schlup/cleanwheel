@@ -1,13 +1,55 @@
 import Header from '../Header';
 import Title from '../Title';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Cookies from 'js-cookie'; // Importa a biblioteca
 
 const Login = () => {
   const navigate = useNavigate();
 
-  async function goTo() {
-    navigate('/home');
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:8080/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+
+        // Salva o token em um cookie com js-cookie
+        Cookies.set('token', data.token, { expires: 7 }); // Expira em 7 dias
+
+        alert('Login realizado com sucesso!');
+        navigate('/home');
+      } else {
+        const errorData = await response.json();
+        alert(`Erro: ${errorData.message || 'Erro ao realizar login'}`);
+      }
+    } catch (error) {
+      console.error('Erro ao realizar login:', error);
+      alert('Erro ao tentar realizar o login.');
+    }
+  }
+
   return (
     <main className="w-full min-h-screen bg-c11">
       <Header />
@@ -23,8 +65,7 @@ const Login = () => {
           <section>
             <form
               className="flex flex-col ml-[12px] pb-[20px]"
-              action=""
-              method="get"
+              onSubmit={handleSubmit}
             >
               <label
                 className="font-poppins text-2-s pb-[10px]"
@@ -34,11 +75,13 @@ const Login = () => {
               </label>
               <input
                 className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
+                type="email"
                 name="email"
                 id="email"
                 placeholder="contato@email.com"
-                autoFocus
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
               <label
                 className="font-poppins text-2-s pt-[20px] pb-[10px]"
@@ -48,20 +91,22 @@ const Login = () => {
               </label>
               <input
                 className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
-                type="text"
+                type="password"
                 name="password"
                 id="password"
                 placeholder="Insira sua senha"
-                autoFocus
+                value={formData.password}
+                onChange={handleChange}
+                required
               />
+              <button
+                type="submit"
+                className="w-[126px] h-[56px] ml-[12px] mt-[20px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+              >
+                Entrar
+              </button>
             </form>
           </section>
-          <button
-            onClick={goTo}
-            className="w-[126px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
-          >
-            Entrar
-          </button>
         </div>
       </div>
     </main>
