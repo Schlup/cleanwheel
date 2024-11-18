@@ -68,8 +68,6 @@ public class BusinessService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Business> businesses = businessRepository.findAll(pageable);
 
-        // Aqui você pode utilizar o ownerUUID para adicionar alguma lógica, se necessário
-
         return businesses.map(business -> {
             BusinessContact contact = business.getContact(); // Acessa o contato
             BusinessAddress address = business.getAddress(); // Acessa o endereço
