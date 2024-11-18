@@ -38,6 +38,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT, "/person/update").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/person/profile").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/person/getBusinessUuid").hasRole("OWNER")
 
                         .requestMatchers(HttpMethod.POST, "/business/register").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "/business/update/{uuid}").hasRole("OWNER")

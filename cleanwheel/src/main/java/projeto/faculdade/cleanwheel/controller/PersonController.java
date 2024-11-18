@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import projeto.faculdade.cleanwheel.config.TokenService;
 import projeto.faculdade.cleanwheel.dto.PersonReadDTO;
 import projeto.faculdade.cleanwheel.dto.PersonUpdateDTO;
+import projeto.faculdade.cleanwheel.model.Business;
 import projeto.faculdade.cleanwheel.model.Person;
+import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 import projeto.faculdade.cleanwheel.service.PersonService;
 
@@ -26,6 +28,9 @@ public class PersonController {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private BusinessRepository businessRepository;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping(path = "/update")
@@ -67,6 +72,23 @@ public class PersonController {
         } else {
             return ResponseEntity.ok(true);
         }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/getBusinessUuid")
+    public ResponseEntity<UUID> getBusinessUuid(@RequestHeader("Authorization") String token) {
+        UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
+
+        Person person = personRepository.findById(personUuid)
+                .orElseThrow(() -> new RuntimeException("Person not found"));
+
+        Business business = businessRepository.findByOwner(person);
+
+        if (business == null) {
+            return ResponseEntity.notFound().build(); // Retorna 404 caso o negócio não seja encontrado
+        }
+
+        return ResponseEntity.ok(business.getUuid());
     }
 
 }

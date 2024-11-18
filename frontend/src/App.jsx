@@ -15,8 +15,9 @@ import Polimento from './Components/Polimento';
 import Envelopamento from './Components/Envelopamento';
 import EditProfile from './Components/EditProfile';
 import EditCompany from './Components/EditCompany';
-import { CompanyAuthContext } from './Components/Context/BusinessAuthContext';
+import { CompanyAuthContext } from './Components/Context/CompanyAuthContext';
 import ProtectedRoute from './Components/ProtectedRoute';
+import BusinessDashboard from './Components/BusinessDashboard';
 
 const App = () => {
 
@@ -41,6 +42,8 @@ const App = () => {
             <Route path="/editprofile" element={<EditProfile />} />
 
             {/* Rotas protegidas */}
+
+            <Route path="/dashboard/:businessUuid" element={<BusinessDashboard />} />
             <Route path="/editcompany" element={<ProtectedRoute><EditCompany /></ProtectedRoute>} />
 
             {/* Rotas de "Acesso Negado" */}
