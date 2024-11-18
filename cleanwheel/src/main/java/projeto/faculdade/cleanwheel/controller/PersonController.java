@@ -49,4 +49,24 @@ public class PersonController {
         PersonReadDTO personReadDTO = personService.getPersonProfile(personUuid);
         return ResponseEntity.ok(personReadDTO);
     }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/isOwner")
+    public ResponseEntity<Boolean> getIsOwner(@RequestHeader("Authorization") String token) {
+        UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
+        boolean resIsOwner = personService.ifIsOwner(personUuid);
+        return ResponseEntity.ok(resIsOwner);
+    }
+
+    // ARRUMAR ISSO AQUI PARA FICAR MAIS SEGURO!
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/isLoggedIn")
+    public ResponseEntity<Boolean> getIsLoggedIn(@RequestHeader("Authorization") String token) {
+        if (token.isEmpty()) {
+            return ResponseEntity.ok(false);
+        } else {
+            return ResponseEntity.ok(true);
+        }
+    }
+
 }

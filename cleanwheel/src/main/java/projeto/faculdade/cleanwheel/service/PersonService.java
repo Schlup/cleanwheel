@@ -8,6 +8,7 @@ import projeto.faculdade.cleanwheel.dto.PersonReadDTO;
 import projeto.faculdade.cleanwheel.dto.PersonUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.RegisterDTO;
 import projeto.faculdade.cleanwheel.model.Person;
+import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
 
 import java.util.List;
@@ -23,11 +24,14 @@ public class PersonService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private BusinessRepository businessRepository;
+
     // Register, Login, Update
 
     //Literalmente só salva o user no db
     public Person savePerson(RegisterDTO personDTO) {
-    return null;
+        return null;
     }
 
     public List<Person> getAllPersons() {
@@ -57,4 +61,9 @@ public class PersonService {
         );
     }
 
+    public Boolean ifIsOwner(UUID personUuid) {
+        Person owner = new Person();
+        owner.setUuid(personUuid);
+        return businessRepository.existsByOwner(owner);
+    }
 }

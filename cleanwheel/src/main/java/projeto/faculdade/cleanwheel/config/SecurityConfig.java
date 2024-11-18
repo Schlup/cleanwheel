@@ -33,6 +33,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/person/isOwner").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/person/isLoggedIn").permitAll()
 
                         .requestMatchers(HttpMethod.PUT, "/person/update").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/person/profile").hasRole("USER")

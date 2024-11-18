@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import projeto.faculdade.cleanwheel.dto.AppointmentDTO;
 import projeto.faculdade.cleanwheel.dto.AppointmentStatusUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetAppointmentsDTO;
-import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.*;
 import projeto.faculdade.cleanwheel.repository.*;
 

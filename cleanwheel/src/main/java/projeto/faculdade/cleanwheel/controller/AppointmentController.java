@@ -8,7 +8,6 @@ import projeto.faculdade.cleanwheel.config.TokenService;
 import projeto.faculdade.cleanwheel.dto.AppointmentDTO;
 import projeto.faculdade.cleanwheel.dto.AppointmentStatusUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetAppointmentsDTO;
-import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.Appointment;
 import projeto.faculdade.cleanwheel.service.AppointmentService;
 
@@ -31,6 +30,7 @@ public class AppointmentController {
         Appointment createdAppointment = appointmentService.createAppointment(personUuid, appointmentDTO);
         return ResponseEntity.ok(createdAppointment);
     }
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/listAllAppointments")

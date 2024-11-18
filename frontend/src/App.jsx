@@ -15,28 +15,40 @@ import Polimento from './Components/Polimento';
 import Envelopamento from './Components/Envelopamento';
 import EditProfile from './Components/EditProfile';
 import EditCompany from './Components/EditCompany';
+import { CompanyAuthContext } from './Components/Context/BusinessAuthContext';
+import ProtectedRoute from './Components/ProtectedRoute';
 
 const App = () => {
+
   return (
     <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/singup" element={<SingUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/myprofile" element={<MyProfile />} />
-          <Route path="/createcompany" element={<CreateCompany />} />
-          <Route path="/createschedule" element={<CreateSchedule />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/lavacao" element={<Lavacao />} />
-          <Route path="/polimento" element={<Polimento />} />
-          <Route path="/envelopamento" element={<Envelopamento />} />
-          <Route path="/editprofile" element={<EditProfile />} />
-          <Route path="/editcompany" element={<EditCompany />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+      <CompanyAuthContext>
+        <BrowserRouter>
+          <Routes>
+            {/* Rotas públicas */}
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/singup" element={<SingUp />} />
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/myprofile" element={<MyProfile />} />
+            <Route path="/createcompany" element={<CreateCompany />} />
+            <Route path="/createschedule" element={<CreateSchedule />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/lavacao" element={<Lavacao />} />
+            <Route path="/polimento" element={<Polimento />} />
+            <Route path="/envelopamento" element={<Envelopamento />} />
+            <Route path="/editprofile" element={<EditProfile />} />
+
+            {/* Rotas protegidas */}
+            <Route path="/editcompany" element={<ProtectedRoute><EditCompany /></ProtectedRoute>} />
+
+            {/* Rotas de "Acesso Negado" */}
+            <Route path="/not-authorized" element={<div>Você não tem permissão para acessar esta página.</div>} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </CompanyAuthContext>
     </div>
   );
 };
