@@ -2,8 +2,6 @@ package projeto.faculdade.cleanwheel.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import projeto.faculdade.cleanwheel.config.TokenService;
@@ -12,14 +10,13 @@ import projeto.faculdade.cleanwheel.dto.BusinessRegisterDTO;
 import projeto.faculdade.cleanwheel.dto.BusinessUpdateDTO;
 import projeto.faculdade.cleanwheel.dto.GetBusinessDTO;
 import projeto.faculdade.cleanwheel.model.Business;
-import projeto.faculdade.cleanwheel.model.BusinessAddress;
-import projeto.faculdade.cleanwheel.model.BusinessContact;
 import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.service.BusinessService;
 
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/business")
 public class BusinessController {
 
@@ -44,11 +41,18 @@ public class BusinessController {
     @GetMapping(path = "/listAllBusiness")
     public ResponseEntity<Page<GetBusinessDTO>> listBusinesses(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "12") int size) {
+            @RequestParam(defaultValue = "12") int size,
+            @RequestHeader("Authorization") String token) { // Adicionando o parâmetro do token
 
+        // Aqui você pode realizar validações ou qualquer lógica com o token, caso necessário.
+        String tokenRaw = token.replace("Bearer ", "");
+        tokenService.validateToken(tokenRaw);
+
+        // Passa o UUID do owner para o serviço
         Page<GetBusinessDTO> dtoPage = businessService.listAllBusinesses(page, size);
         return ResponseEntity.ok(dtoPage);
     }
+
 
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/{uuid}")

@@ -6,6 +6,7 @@ import SingUp from './Components/SingUp/SingUp';
 import Schedule from './Components/Schedule';
 import Services from './Components/Services';
 import MyProfile from './Components/MyProfile';
+import Lavacao from './Lavacao';
 
 function Router() {
 
@@ -33,6 +34,8 @@ function Router() {
 
 
                 <Route path='/createcompany' element={<CreateCompany />} />
+
+                <Route path='/lavacao' element={<Lavacao />} />
 
 
 
