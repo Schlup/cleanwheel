@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import HeaderL from './HeaderL';
@@ -6,67 +6,101 @@ import Title from './Title';
 import Cookies from 'js-cookie';
 
 const BusinessDashboard = () => {
-    const { businessUuid } = useParams(); // Obtém o UUID da URL
-    const [companyData, setCompanyData] = useState(null);
+    const { businessUuid } = useParams(); // Obtém o UUID da empresa pela URL
+    const navigate = useNavigate(); // Para navegação entre páginas
+    const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [page, setPage] = useState(0); // Página inicial
+    const [size, setSize] = useState(12); // Tamanho da página
 
     useEffect(() => {
-        const fetchCompanyData = async () => {
-            const token = Cookies.get('token'); //
+        const fetchAppointments = async () => {
+            const token = Cookies.get('token');
+
+            if (!token) {
+                setError('Token não encontrado. Faça login novamente.');
+                setLoading(false);
+                return;
+            }
+
             try {
-                console.log(businessUuid)
-                const response = await axios.get(`http://localhost:8080/business/${businessUuid}`, {
+                setLoading(true);
+                const response = await axios.get(
+                    `http://localhost:8080/appointment/listAllAppointments?businessUuid=${businessUuid}&page=${page}&size=${size}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-                setCompanyData(response.data); // Armazena os dados da empresa
-            } catch (err) {
-                setError('Erro ao carregar os dados da empresa.');
+
+                setAppointments(response.data.content || []); // Verifique se `content` existe
+            } catch (error) {
+                console.error('Erro ao buscar os appointments:', error);
+                setError(error.message || 'Erro desconhecido');
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchCompanyData();
-    }, [businessUuid]);
+        fetchAppointments();
+    }, [businessUuid, page, size]); // Recarrega os dados quando businessUuid, page ou size mudam
 
     return (
         <main className="w-full min-h-screen bg-c11">
             <HeaderL />
-            <Title title="DASHBOARD DA EMPRESA" subtitle="Gerencie sua empresa" />
-
-            <div className="flex justify-center">
-                <div className="w-fit h-full pl-[48px] pr-[60px] pt-[20px] pb-[60px] bg-c12">
-                    {loading ? (
-                        <p className="text-white">Carregando...</p>
-                    ) : error ? (
-                        <p className="text-red-500">{error}</p>
-                    ) : (
-                        <>
-                            <div className="flex flex-row">
-                                <p className="w-[4px] h-[8px] my-[7px] mr-[8px] bg-p1"></p>
-                                <p className="h-[24px] font-poppins text-w text-1cs uppercase mb-[20px]">
-                                    Informações da Empresa
-                                </p>
-                            </div>
-                            <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
-                                <p className="font-poppins text-c4 text-1-s">Nome da Empresa</p>
-                                <p className="font-roboto text-2-s text-c6">{companyData?.name}</p>
-                            </div>
-                            <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
-                                <p className="font-poppins text-c4 text-1-s">CNPJ</p>
-                                <p className="font-roboto text-2-s text-c6">{companyData?.cnpj}</p>
-                            </div>
-                            <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
-                                <p className="font-poppins text-c4 text-1-s">Endereço</p>
-                                <p className="font-roboto text-2-s text-c6">{companyData?.address}</p>
-                            </div>
-                        </>
-                    )}
-                </div>
+            <Title title="DASHBOARD DA EMPRESA" subtitle="Gerencie seus agendamentos" />
+            {/* Botões de ação */}
+            <div className="flex gap-4 mt-6">
+                <button
+                    className="w-[248px] h-[56px] mt-[16px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+                    onClick={() => navigate(`/business/${businessUuid}/employees`)}
+                >
+                    FUNCIONÁRIOS
+                </button>
+                <button
+                    className="w-[248px] h-[56px] mt-[16px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+                    onClick={() => navigate(`/business/${businessUuid}/edit`)}
+                >
+                    EDITAR EMPRESA
+                </button>
             </div>
+
+            {/* Conteúdo principal */}
+            {loading ? (
+                <p className="text-center mt-10 text-white">Carregando...</p>
+            ) : error ? (
+                <p className="text-center mt-10 text-red-500">{error}</p>
+            ) : (
+                <div className="mx-[100px] grid grid-cols-3 gap-[20px] mt-8">
+                    {appointments.map((appointment) => (
+                        <div key={appointment.uuid} className="flex justify-between">
+                            <div className="w-fit h-full pl-[18px] pr-[16px] py-[16px] bg-w shadow-md rounded-lg">
+                                <div className="flex flex-row justify-between mb-[16px]">
+                                    <div className="h-[16px] align-middle col-start inline-flex pl-[18px]">
+                                        <p className="pl-[8px] w-max-[250px] font-poppins text-2cs text-c11">
+                                            Cliente: {appointment.customerName || 'Não informado'}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-1 ml-[40px]">
+                                    <div className="mb-[8px]">
+                                        <p className="font-poppins text-c4 text-1-s">Data</p>
+                                        <p className="font-roboto text-2-s text-c6">{appointment.date}</p>
+                                    </div>
+                                    <div className="mb-[8px]">
+                                        <p className="font-poppins text-c4 text-1-s">Horário</p>
+                                        <p className="font-roboto text-2-s text-c6">{appointment.time}</p>
+                                    </div>
+                                    <div>
+                                        <p className="font-poppins text-c4 text-1-s">Serviço</p>
+                                        <p className="font-roboto text-2-s text-c6">{appointment.serviceName || 'Não especificado'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </main>
     );
 };

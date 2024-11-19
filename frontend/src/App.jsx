@@ -18,6 +18,7 @@ import EditCompany from './Components/EditCompany';
 import { CompanyAuthContext } from './Components/Context/CompanyAuthContext';
 import ProtectedRoute from './Components/ProtectedRoute';
 import BusinessDashboard from './Components/BusinessDashboard';
+import BusinessEmployees from './Components/BusinessEmployees';
 
 const App = () => {
 
@@ -44,6 +45,9 @@ const App = () => {
             {/* Rotas protegidas */}
 
             <Route path="/dashboard/:businessUuid" element={<BusinessDashboard />} />
+
+            <Route path="/business/:businessUuid/employees" element={<BusinessEmployees />} />
+
             <Route path="/editcompany" element={<ProtectedRoute><EditCompany /></ProtectedRoute>} />
 
             {/* Rotas de "Acesso Negado" */}
