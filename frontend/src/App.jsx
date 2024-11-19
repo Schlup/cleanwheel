@@ -19,6 +19,7 @@ import { CompanyAuthContext } from './Components/Context/CompanyAuthContext';
 import ProtectedRoute from './Components/ProtectedRoute';
 import BusinessDashboard from './Components/BusinessDashboard';
 import BusinessEmployees from './Components/BusinessEmployees';
+import BusinessEdit from './Components/BusinessEdit';
 
 const App = () => {
 
@@ -47,6 +48,8 @@ const App = () => {
             <Route path="/dashboard/:businessUuid" element={<BusinessDashboard />} />
 
             <Route path="/business/:businessUuid/employees" element={<BusinessEmployees />} />
+
+            <Route path="/business/:businessUuid/edit" element={<BusinessEdit />} />
 
             <Route path="/editcompany" element={<ProtectedRoute><EditCompany /></ProtectedRoute>} />
 

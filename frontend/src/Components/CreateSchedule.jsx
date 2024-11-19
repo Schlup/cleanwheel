@@ -61,7 +61,7 @@ const CreateSchedule = () => {
         },
       });
       // Navegar para a página de confirmação ou agendamentos
-      navigate('/schedule');
+      navigate('/home');
     } catch (err) {
       setError('Erro ao agendar o serviço');
       console.error(err);
