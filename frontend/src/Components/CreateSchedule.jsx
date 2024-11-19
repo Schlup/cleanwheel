@@ -55,11 +55,15 @@ const CreateSchedule = () => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8080/appointment/create', appointmentData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      const response = await axios.post(
+        'http://localhost:8080/appointment/create',
+        appointmentData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       // Navegar para a página de confirmação ou agendamentos
       navigate('/home');
     } catch (err) {
@@ -81,8 +85,14 @@ const CreateSchedule = () => {
             </p>
           </div>
           <section>
-            <form className="flex flex-col ml-[12px] pb-[20px]" onSubmit={handleSubmit}>
-              <label className="font-poppins text-c11 text-2-s pb-[10px]" htmlFor="date">
+            <form
+              className="flex flex-col ml-[12px] pb-[20px]"
+              onSubmit={handleSubmit}
+            >
+              <label
+                className="font-poppins text-c11 text-2-s pb-[10px]"
+                htmlFor="date"
+              >
                 Data
               </label>
               <input
@@ -95,7 +105,10 @@ const CreateSchedule = () => {
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
-              <label className="font-poppins text-c11 text-2-s pt-[20px] pb-[10px]" htmlFor="time">
+              <label
+                className="font-poppins text-c11 text-2-s pt-[20px] pb-[10px]"
+                htmlFor="time"
+              >
                 Horário
               </label>
               <input
@@ -107,7 +120,10 @@ const CreateSchedule = () => {
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
               />
-              <label className="font-poppins text-c11 text-2-s pt-[20px] pb-[10px]" htmlFor="service">
+              <label
+                className="font-poppins text-c11 text-2-s pt-[20px] pb-[10px]"
+                htmlFor="service"
+              >
                 Serviço
               </label>
               <select
@@ -125,7 +141,10 @@ const CreateSchedule = () => {
                 ))}
               </select>
               {error && <p className="text-red-500 mt-2">{error}</p>}
-              <button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded">
+              <button
+                type="submit"
+                className="w-fit mt-[16px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:bg-[#FFBF00] hover:text-c3 transition duration-200"
+              >
                 Agendar Serviço
               </button>
             </form>

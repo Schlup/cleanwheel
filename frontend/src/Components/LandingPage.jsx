@@ -15,7 +15,7 @@ const LandingPage = () => {
             polimento, envelopamento, revisão, manutenção, funilaria e pintura,
             proporcionando eficiência e controle das operações com Clean Wheel.
           </p>
-          <button className="w-[167px] h-[56px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins">
+          <button className="w-fit px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:text-c3 transition duration-200">
             Saiba mais
           </button>
         </div>

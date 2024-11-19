@@ -24,12 +24,15 @@ const MyProfile = () => {
 
       try {
         // Buscando dados do perfil
-        const profileResponse = await fetch('http://localhost:8080/person/profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
+        const profileResponse = await fetch(
+          'http://localhost:8080/person/profile',
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         if (profileResponse.ok) {
           const profileData = await profileResponse.json();
@@ -40,11 +43,14 @@ const MyProfile = () => {
         }
 
         // Verificando se o usuário é OWNER de uma empresa
-        const ownerResponse = await axios.get('http://localhost:8080/person/isOwner', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
+        const ownerResponse = await axios.get(
+          'http://localhost:8080/person/isOwner',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         setIsOwner(ownerResponse.data);
       } catch (err) {
@@ -71,11 +77,14 @@ const MyProfile = () => {
     }
 
     try {
-      const response = await axios.get('http://localhost:8080/person/getBusinessUuid', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      const response = await axios.get(
+        'http://localhost:8080/person/getBusinessUuid',
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.status === 200) {
         const businessUuid = response.data;
@@ -109,16 +118,16 @@ const MyProfile = () => {
               </div>
               <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
                 <p className="font-poppins text-c4 text-1-s">Nome</p>
-                <p className="font-roboto text-2-s text-c6">{profileData?.name}</p>
-              </div>
-              <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
-                <p className="font-poppins text-c4 text-1-s">Sobrenome</p>
-                <p className="font-roboto text-2-s text-c6">{profileData?.lastname}</p>
+                <p className="font-roboto text-2-s text-c6 flex">
+                  {profileData?.name + ' ' + profileData?.lastname}
+                </p>
               </div>
               <div className="w-[580px] h-[1px] ml-[12px] bg-c11 mt-[10px] mb-[9px]"></div>
               <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
                 <p className="font-poppins text-c4 text-1-s uppercase">CPF</p>
-                <p className="font-roboto text-2-s text-c6">{profileData?.cpf}</p>
+                <p className="font-roboto text-2-s text-c6">
+                  {profileData?.cpf}
+                </p>
               </div>
 
               <div className="flex flex-row mt-[40px]">
@@ -129,23 +138,27 @@ const MyProfile = () => {
               </div>
               <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
                 <p className="font-poppins text-c4 text-1-s">Email</p>
-                <p className="font-roboto text-2-s text-c6">{profileData?.email}</p>
+                <p className="font-roboto text-2-s text-c6">
+                  {profileData?.email}
+                </p>
               </div>
               <div className="w-[580px] h-[1px] ml-[12px] bg-c11 mt-[10px] mb-[9px]"></div>
               <div className="w-[580px] h-[24px] ml-[12px] flex justify-between">
-                <p className="font-poppins text-c4 text-1-s uppercase">Telefone</p>
-                <p className="font-roboto text-2-s text-c6">{profileData?.phone}</p>
+                <p className="font-poppins text-c4 text-1-s">Telefone</p>
+                <p className="font-roboto text-2-s text-c6">
+                  {profileData?.phone}
+                </p>
               </div>
               <div className="mt-[20px] ml-[12px] flex justify-between">
                 <button
                   onClick={goOut}
-                  className="w-[43px] h-[24px] rounded-[5px] bg-c10 text-c4 font-poppins"
+                  className="w-fit px-[8px] py-[4px] rounded-[5px] text-c4 font-poppins bg-c10 hover:bg-[#FFBF00] hover:text-[#332200] transition duration-200"
                 >
                   Sair
                 </button>
                 <button
                   onClick={goToEditProfile}
-                  className="font-poppins text-1-s text-p1"
+                  className="font-poppins text-1-s text-p1 hover:underline transition duration-200"
                 >
                   Editar conta
                 </button>
@@ -154,7 +167,7 @@ const MyProfile = () => {
               {isOwner && (
                 <button
                   onClick={goToCompanyDashboard}
-                  className="w-[248px] h-[56px] mt-[16px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+                  className="w-fit mt-[16px] ml-[12px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:bg-[#FFBF00] hover:text-c3 transition duration-200"
                 >
                   Ver minha empresa
                 </button>
@@ -163,7 +176,7 @@ const MyProfile = () => {
               {!isOwner && (
                 <button
                   onClick={goToCreateCompany}
-                  className="w-[248px] h-[56px] mt-[16px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#F2A50C] to-[#FFBF00] text-p5 text-1-m uppercase font-poppins"
+                  className="w-fit mt-[16px] ml-[12px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:bg-[#FFBF00] hover:text-c3 transition duration-200"
                 >
                   Registrar empresa
                 </button>

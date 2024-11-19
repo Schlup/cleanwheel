@@ -15,7 +15,7 @@ const Lavacao = () => {
   const [businesses, setBusinesses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [page, setPage] = useState(0);  // Página inicial
+  const [page, setPage] = useState(0); // Página inicial
   const [size, setSize] = useState(12); // Tamanho da página
 
   useEffect(() => {
@@ -30,11 +30,14 @@ const Lavacao = () => {
 
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:8080/business/listAllBusiness?page=0&size=12', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
+        const response = await axios.get(
+          'http://localhost:8080/business/listAllBusiness?page=0&size=12',
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         setBusinesses(response.data.content || []); // Verifique se `content` existe
       } catch (error) {
@@ -74,27 +77,29 @@ const Lavacao = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2">
-                    <div className="ml-[40px] col-start">
-                      <div className="mr-[16px] grid grid-flow-row auto-rows-max">
+                  <div className="flex justify-between space-x-[16px]">
+                    <div className="w-fit col-start">
+                      <div className="pl-[40px] grid grid-flow-row">
                         <div className="inline-flex">
                           <span className="pt-[4px] mr-[8px]">
                             <IcoPhone />
                           </span>
-                          <p>{business.businessPhone || '(47) 9999-9999'}</p>
+                          <p className="w-fit text-left">
+                            {business.businessPhone || 'Telefone não informado'}
+                          </p>
                         </div>
                         <div className="inline-flex">
                           <span className="pt-[4px] mr-[8px]">
                             <IcoLocation />
                           </span>
-                          <p className="w-[180px]">
+                          <p className="text-left text-nowrap truncate hover:w-fit">
                             {`${business.streetName}, ${business.neighborhood}, ${business.city}` ||
                               'Endereço não informado'}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="col-end">
+                    <div className="w-fit col-end">
                       <img
                         className="w-max-[116px] h-max-[116px] rounded-[5px]"
                         src={imgCarWash}

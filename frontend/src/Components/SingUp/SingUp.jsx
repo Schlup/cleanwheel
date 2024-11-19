@@ -152,7 +152,7 @@ const SignUp = () => {
               />
               <button
                 type="submit"
-                className="w-[193px] h-[56px] mt-[20px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+                className="w-fit mt-[20px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:text-c3 transition duration-200"
               >
                 Registrar-se
               </button>

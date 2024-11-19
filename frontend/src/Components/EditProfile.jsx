@@ -11,7 +11,7 @@ const EditProfile = () => {
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
-    cpf: ''
+    phone: '',
   });
 
   const [error, setError] = useState(null);
@@ -25,6 +25,10 @@ const EditProfile = () => {
       [name]: value,
     }));
   };
+
+  const handleCancel = async () => {
+    navigate("/myprofile")
+  }
 
   // Função para enviar os dados ao backend
   const handleSubmit = async () => {
@@ -50,7 +54,7 @@ const EditProfile = () => {
         body: JSON.stringify({
           name: formData.name,
           lastname: formData.lastname,
-          cpf: formData.cpf
+          phone: formData.phone,
         }),
       });
 
@@ -109,29 +113,34 @@ const EditProfile = () => {
                 value={formData.lastname}
                 onChange={handleChange}
               />
-                <label
+              <label
                 className="font-poppins text-2-s pt-[20px] pb-[10px]"
-                htmlFor="cpf"
+                htmlFor="phone"
               >
-                CPF
+                Telefone
               </label>
               <input
                 className="w-[580px] h-[48px] bg-c1 font-roboto text-c7 text-2-s rounded-[5px] outline outline-c2 outline-offset-0 pl-3"
                 type="text"
-                name="cpf"
-                id="cpf"
-                placeholder="Insira seu CPF"
-                value={formData.cpf}
+                name="phone"
+                id="phone"
+                placeholder="Insira seu telefone"
+                value={formData.phone}
                 onChange={handleChange}
               />
-          
             </form>
           </section>
           <button
             onClick={handleSubmit}
-            className="w-[193px] h-[56px] ml-[12px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+            className="w-fit ml-[12px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:bg-[#FFBF00] hover:text-c3 transition duration-200"
           >
             Alterar
+          </button>
+          <button
+            onClick={handleCancel}
+            className="w-fit ml-[12px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:bg-[#FFBF00] hover:text-c3 transition duration-200"
+          >
+            Cancelar
           </button>
         </div>
       </div>

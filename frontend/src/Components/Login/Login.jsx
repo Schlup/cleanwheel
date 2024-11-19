@@ -101,7 +101,7 @@ const Login = () => {
               />
               <button
                 type="submit"
-                className="w-[126px] h-[56px] ml-[12px] mt-[20px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins"
+                className="w-fit mt-[20px] px-[32px] py-[16px] rounded-[5px] bg-gradient-to-b from-[#FFBF00] to-[#F2A50C] text-p5 text-1-m uppercase font-poppins hover:text-c3 transition duration-200"
               >
                 Entrar
               </button>
