@@ -1,4 +1,4 @@
-package projeto.faculdade.cleanwheel.controller;
+package cleanwheel.src.main.java.projeto.faculdade.cleanwheel.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
