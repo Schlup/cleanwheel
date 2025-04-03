@@ -1,4 +1,4 @@
-package cleanwheel.src.main.java.projeto.faculdade.cleanwheel.controller;
+package projeto.faculdade.cleanwheel.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +32,12 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+
+        System.out.println(usernamePassword);
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((Person) auth.getPrincipal());
+        System.out.println(token);
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }

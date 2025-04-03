@@ -1,15 +1,18 @@
-import Header from '../Header';
-import Title from '../Title';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import Cookies from 'js-cookie'; // Importa a biblioteca
+import Header from "../Header";
+import Title from "../Title";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../Redux/Slices/authSlice";
+import Cookies from "js-cookie";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch(); // Usa Redux para atualizar o estado global
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   function handleChange(event) {
@@ -24,10 +27,10 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -35,18 +38,44 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
 
-        // Salva o token em um cookie com js-cookie
+        // Após o login, busca os dados do usuário
         Cookies.set('token', data.token, { expires: 7 }); // Expira em 7 dias
+        
+        console.log(data.token)
+        console.log(data)
+        
+        await fetchUserData();
 
-        alert('Login realizado com sucesso!');
-        navigate('/home');
+        alert("Login realizado com sucesso!");
+        navigate("/home");
+
+        // Chamada para a API que irá retornar todos os dados do usuário para guardar no REDUX
+
       } else {
         const errorData = await response.json();
-        alert(`Erro: ${errorData.message || 'Erro ao realizar login'}`);
+        alert(`Erro: ${errorData.message || "Erro ao realizar login"}`);
       }
     } catch (error) {
-      console.error('Erro ao realizar login:', error);
-      alert('Erro ao tentar realizar o login.');
+      console.error("Erro ao realizar login:", error);
+      alert("Erro ao tentar realizar o login.");
+    }
+  }
+
+  async function fetchUserData() {
+    try {
+      const response = await fetch("http://localhost:8080/person/profile", {
+        method: "GET",
+        credentials: "include", // Inclui o cookie de autenticação
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        dispatch(setUser({ user: userData })); // Armazena os dados no Redux
+      } else {
+        console.warn("Falha ao buscar os dados do usuário.");
+      }
+    } catch (error) {
+      console.error("Erro ao buscar os dados do usuário:", error);
     }
   }
 

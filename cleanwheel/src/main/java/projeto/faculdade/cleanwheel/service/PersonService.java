@@ -4,9 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import projeto.faculdade.cleanwheel.dto.PersonReadDTO;
-import projeto.faculdade.cleanwheel.dto.PersonUpdateDTO;
-import projeto.faculdade.cleanwheel.dto.RegisterDTO;
+import projeto.faculdade.cleanwheel.dto.*;
 import projeto.faculdade.cleanwheel.model.Person;
 import projeto.faculdade.cleanwheel.repository.BusinessRepository;
 import projeto.faculdade.cleanwheel.repository.PersonRepository;
@@ -52,12 +50,22 @@ public class PersonService {
     public PersonReadDTO getPersonProfile(UUID personUuid) {
         Person person = personRepository.findById(personUuid)
                 .orElseThrow(() -> new EntityNotFoundException("Person not found"));
+
+        // Buscar a empresa associada ao usuário (se ele for dono)
+        BusinessReadDTO businessDTO = businessRepository.findByOwner(person)
+                .map(business -> new BusinessReadDTO(
+                        business.getUuid().toString(),
+                        business.getName()
+                ))
+                .orElse(null); // Se o usuário não for dono de um negócio, retorna null
+
         return new PersonReadDTO(
                 person.getName(),
                 person.getLastname(),
                 person.getEmail(),
                 person.getCpf(),
-                person.getContact() != null ? person.getContact().getPhone() : null
+                person.getContact() != null ? person.getContact().getPhone() : null,
+                businessDTO
         );
     }
 

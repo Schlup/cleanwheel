@@ -13,6 +13,7 @@ import projeto.faculdade.cleanwheel.repository.PersonRepository;
 import projeto.faculdade.cleanwheel.service.PersonService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -82,13 +83,13 @@ public class PersonController {
         Person person = personRepository.findById(personUuid)
                 .orElseThrow(() -> new RuntimeException("Person not found"));
 
-        Business business = businessRepository.findByOwner(person);
+        Optional<Business> business = businessRepository.findByOwner(person);
 
         if (business == null) {
             return ResponseEntity.notFound().build(); // Retorna 404 caso o negócio não seja encontrado
         }
 
-        return ResponseEntity.ok(business.getUuid());
+        return ResponseEntity.ok(business.get().getUuid());
     }
 
 }
