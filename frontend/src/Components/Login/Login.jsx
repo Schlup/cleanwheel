@@ -40,10 +40,7 @@ const Login = () => {
 
         // Após o login, busca os dados do usuário
         Cookies.set('token', data.token, { expires: 7 }); // Expira em 7 dias
-        
-        console.log(data.token)
-        console.log(data)
-        
+
         await fetchUserData();
 
         alert("Login realizado com sucesso!");
@@ -62,15 +59,18 @@ const Login = () => {
   }
 
   async function fetchUserData() {
+    const token = Cookies.get('token')
     try {
-      const response = await fetch("http://localhost:8080/person/profile", {
+      const profileResponse = await fetch("http://localhost:8080/person/profile", {
         method: "GET",
-        credentials: "include", // Inclui o cookie de autenticação
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
 
-      if (response.ok) {
-        const userData = await response.json();
-        dispatch(setUser({ user: userData })); // Armazena os dados no Redux
+      if (profileResponse.ok) {
+        const userData = await profileResponse.json();
+        dispatch(setUser({ user: userData, token: token })); // pro redux
       } else {
         console.warn("Falha ao buscar os dados do usuário.");
       }
