@@ -31,7 +31,6 @@ public class AppointmentController {
         return ResponseEntity.ok(createdAppointment);
     }
 
-
     @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path = "/listAllAppointments")
     public ResponseEntity<Page<GetAppointmentsDTO>> listBusinesses(
@@ -53,6 +52,20 @@ public class AppointmentController {
         UUID employeeUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
         Appointment updatedAppointment = appointmentService.updateAppointmentStatus(appointmentId, statusUpdateDTO, employeeUuid);
         return ResponseEntity.ok(updatedAppointment);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping(path = "/listUsersAppointment")
+    public ResponseEntity<Page<GetAppointmentsDTO>> listUsersAppointment(@RequestHeader("Authorization") String token,
+                                                                         @RequestParam(defaultValue = "0") int page,
+                                                                         @RequestParam(defaultValue = "12") int size) {
+        UUID personUuid = tokenService.getUUIDFromToken(token.replace("Bearer ", ""));
+        Page<GetAppointmentsDTO> appointments = appointmentService.listUsersAppointment(personUuid, page, size);
+
+        System.out.println(appointments.toString());
+        System.out.println(appointments);
+
+        return ResponseEntity.ok(appointments);
     }
 
 }

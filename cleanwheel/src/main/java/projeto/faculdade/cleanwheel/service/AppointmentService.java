@@ -75,6 +75,27 @@ public class AppointmentService {
         });
     }
 
+    public Page<GetAppointmentsDTO> listUsersAppointment(UUID personUuid, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Appointment> appointments = appointmentRepository.findByPersonUuid(personUuid, pageable);
+
+        return appointments.map(appointment -> {
+
+            AppointmentStatus status = appointment.getStatus();
+            projeto.faculdade.cleanwheel.model.Service service = appointment.getService();
+
+            return new GetAppointmentsDTO(
+                    appointment.getUuid(),
+                    appointment.getBusiness().getUuid(),
+                    appointment.getPerson().getUuid(),
+                    status != null ? status.getStatus() : null,
+                    service != null ? service.getService() : null,
+                    appointment.getDate(),
+                    appointment.getTime()
+            );
+        });
+    }
+
     public Appointment updateAppointmentStatus(UUID appointmentId, AppointmentStatusUpdateDTO statusUpdateDTO, UUID employeeUuid) {
 
         Appointment appointment = appointmentRepository.findById(appointmentId)

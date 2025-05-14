@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, UUID> {
     Page<Appointment> findByBusinessUuid(UUID businessUuid, Pageable pageable);
+    Page<Appointment> findByPersonUuid(UUID personUuid, Pageable pageable);
 }
